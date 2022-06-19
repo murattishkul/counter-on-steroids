@@ -1,4 +1,4 @@
-https://vercel.com/murattishkul/counter-on-steroids/AXPHfLNjgmUQgivHeq62tHAuWaRy
+https://counter-on-steroids-l4isp33hm-murattishkul.vercel.app/
 
 Rules 
 
