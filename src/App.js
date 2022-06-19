@@ -26,6 +26,12 @@ function getRandomInt(min=1, max=21) {
     }
   }
 
+  const killTimers = () => {
+    var killId = setTimeout(function() {
+      for (var i = killId; i > 0; i--) clearInterval(i)
+    }, 3000);
+  }
+
 function App() {
   const [gameMode, setGameMode] = useState('medium');
   const [count, setCount] = useState(0); //
@@ -53,17 +59,17 @@ function App() {
 
 
   useEffect(()=>{
-    if(count > ((trophies+1) * 10) ) {
+    if(count >= ((trophies+1) * 10) ) {
       setTrophies(1+trophies);
     }
   },[count])
 
   const selectGameMode = (e) => {
-    console.log(e.target.value)
     const newMode = e.target.value;
 
     clearInterval(decreaseTimer);
     clearTimeout(overrideTimer);
+    clearInterval(overrideInterval);
 
     setGameMode(newMode);
 
@@ -80,9 +86,12 @@ function App() {
     setButtonRed(false);
     setDecreaseTimer(null);
     setOverrideTimer(null);
+    setOverrideInterval(null);
 
     setTimerStarted(false);
     changeInterval(null);
+
+    killTimers();
   }
 
   const handleClick =  () => {
@@ -97,9 +106,9 @@ function App() {
         clearInterval(decreaseTimer);
         setDecreaseTimer(emptyTimer());
         if(getRandomInt()===overdriveChance && !overrideTimer){
-          console.log('OVERRIDE')
+          // console.log('OVERRIDE')
           clearTimeout(overrideTimer);
-          setOverrideTimer(startOverrideTimer());
+          startOverrideTimer();
         }
       } else { // first time you starting the timer, you increment and call the settimeout to track a second.
         setTimerStarted(true);
@@ -107,39 +116,42 @@ function App() {
         else setCount(count + 1)
         setClicks(clicks+1);
         setTimeout( () => {
-          console.log('limit settimeout callback is runnign...')
-          console.log('increasing the limit...')
+          // console.log('limit settimeout callback is runnign...')
+          // console.log('increasing the limit...')
           setLimit(Number.parseInt(clickRef.current.innerText) + cps);
           setTimerStarted(false) 
         }, 1000)
         clearInterval(decreaseTimer);
         setDecreaseTimer(emptyTimer());
         if(getRandomInt()===overdriveChance && !overrideTimer){
-          console.log('OVERRIDE')
-          setOverrideTimer(startOverrideTimer());
+          // console.log('OVERRIDE')
+          startOverrideTimer();
         }
       }
     }
 
   }
 
-  const startOverrideTimer = () => {
+  const startOverrideTimer = async () => {
     setOverride(true);
-    const overrideInterval = setInterval(() => {
+    setOverrideInterval(setInterval(() => {
       setOverrideSeconds(Number.parseInt(overRef.current.innerText) - 1);
-    }, 1000)
-    return setTimeout( () => {
-      console.log('override callback is running...');
+    }, 1000))
+    
+      setOverrideTimer( setTimeout( () => {
+      // console.log('override callback is running...');
       setOverride(false);
       setOverrideTimer(null);
       clearInterval(overrideInterval);
+      setOverrideInterval(null);
       setOverrideSeconds(gameSettings.overdriveDuration[gameMode])
-    }, 10000)
+    }, (1000 + gameSettings.overdriveDuration[gameMode]*1000) )  )
+  
   };
 
   const emptyTimer = () => {
     return setTimeout( () => {
-      console.log('empty settimeout callback is running...');
+      // console.log('empty settimeout callback is running...');
       notClicked();
     }, 10000)
   };
@@ -148,7 +160,7 @@ function App() {
     setButtonRed(true);
     changeInterval(setInterval(()=>{
       setCount(Number.parseInt(countRef.current.innerText) - 1);
-      console.log('changed')
+      // console.log('changed')
     }, 1000))
   }
 
@@ -158,14 +170,25 @@ function App() {
     setButtonRed(false);
   }
 
+  useEffect(()=>{
+    if(overrideSeconds === 0 && overrideInterval){
+      console.log('cleared')
+      clearInterval(overrideInterval);
+      setOverrideInterval(null);
+      console.log('roger that')
+    }
+  })
+
+  console.log(overrideSeconds, overrideInterval)
+
 
   // console.log('timerStarted', timerStarted)
-  console.log('limit', limit)
-  console.log('count:', count)
-  console.log('buttonRed:', buttonRed)
-  console.log('overrode', override)
+  // console.log('limit', limit)
+  // console.log('count:', count)
+  // console.log('buttonRed:', buttonRed)
+  // console.log('overrode', override)
 
-  console.log("gameMode", gameMode)
+  // console.log("gameMode", gameMode)
 
   return (
     <>
