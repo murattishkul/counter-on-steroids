@@ -41,6 +41,20 @@ function App() {
 
   const {width, height} = useWindowSize();
 
+  useEffect(()=>{
+    if(overrideSeconds === 0 && overrideInterval){
+      clearInterval(overrideInterval);
+      setOverrideInterval(null);
+    }
+  })
+
+  useEffect(()=>{
+    if(count === 0 && interval){
+      clearInterval(interval);
+      changeInterval(null);
+      setButtonRed(false);
+    }
+  })
 
   useEffect(()=>{
     if(count >= ((trophies+1) * 10) ) {
@@ -147,21 +161,6 @@ function App() {
       setCount(Number.parseInt(countRef.current.innerText) - 1);
     }, 1000))
   }
-
-  useEffect(()=>{
-    if(overrideSeconds === 0 && overrideInterval){
-      clearInterval(overrideInterval);
-      setOverrideInterval(null);
-    }
-  })
-
-  useEffect(()=>{
-    if(count === 0 && interval){
-      clearInterval(interval);
-      changeInterval(null);
-      setButtonRed(false);
-    }
-  })
 
   return (
     <>

@@ -1,70 +1,24 @@
-# Getting Started with Create React App
+https://vercel.com/murattishkul/counter-on-steroids/AXPHfLNjgmUQgivHeq62tHAuWaRy
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Rules 
 
-## Available Scripts
+1. Easy – # of clicks/second – 5, overdrive chance – 33.33% , overdrive duration – 15sec     
+2. Medium – # of clicks/second – 3, overdrive chance – 10%, overdrive duration – 10sec     
+3. Hard – # of clicks/second – 1, overdrive chance – 5%, overdrive duration – 5sec
 
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
++ 1. There should be a button that increments a visible counter when a user clicks on it. 
++ 2. The button clicks should be throttled such that more than 3 clicks in a second do not increment the counter. 
++ 3. When the user has not clicked the button in at least 10 seconds:     
++       1. The button should change to a different color.     
++       2. The counter should decrease at a rate of 1 per second until it hits zero. 
+4. The button should have a 10% chance on each click to go into overdrive:                
++	1. Overdrive causes each click on the button to increment the counter twice, instead of only once.     
++	2. Overdrive should last 10 seconds, after which the increments returns to normal.     
++	3. While in overdrive, there should be a timer on the screen that counts down how many seconds are left in overdrive. 
++ 5. When the user reaches any multiple of 10 on the counter (10, 20, 30, etc), they should receive a trophy.     
++	1. The trophy should appear somewhere on the page indicating that the user reached that threshold.     
++	2. The trophy should not disappear if the counter decreases below the threshold for the trophy 
++ 6. There's a switcher that changes game difficulty (easy, medium – default one, hard) that changes several game parameters:     
++	1. Easy – # of clicks/second – 5, overdrive chance – 33.33% , overdrive duration – 15sec     
++	2. Medium – # of clicks/second – 3, overdrive chance – 10%, overdrive duration – 10sec     
++	3. Hard – # of clicks/second – 1, overdrive chance – 5%, overdrive duration – 5sec
