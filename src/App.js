@@ -1,12 +1,11 @@
-import logo from './logo.svg';
-import './App.css';
 import {useEffect, useState, useRef} from 'react';
-
-function getRandomInt(min=1, max=21) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min)) + min; 
-}
+import useWindowSize from './hooks/useWindowSize'
+import Confetti from 'react-confetti'
+import Trophies from './components/Trophy';
+import Select from './components/Select';
+import Counter from './components/Counter';
+import {Text} from './components/Text';
+import {gameSettings, killTimers, getRandomInt} from './utils'
 
 /*
   1. Easy – # of clicks/second – 5, overdrive chance – 33.33% , overdrive duration – 15sec     
@@ -14,48 +13,33 @@ function getRandomInt(min=1, max=21) {
 	3. Hard – # of clicks/second – 1, overdrive chance – 5%, overdrive duration – 5sec
    */
 
-  const gameSettings = {
-    cps : {
-      easy: 5, medium: 3, hard: 1
-    },
-    overdriveChance: {
-      easy: 6, medium: 2, hard: 1
-    },
-    overdriveDuration: {
-      easy: 15, medium: 10, hard: 5
-    }
-  }
-
-  const killTimers = () => {
-    var killId = setTimeout(function() {
-      for (var i = killId; i > 0; i--) clearInterval(i)
-    }, 3000);
-  }
 
 function App() {
   const [gameMode, setGameMode] = useState('medium');
-  const [count, setCount] = useState(0); //
-  const [limit, setLimit] = useState(3); //
-  const [clicks, setClicks] = useState(0);//
-  const [buttonRed, setButtonRed] = useState(false); //
-  const [override, setOverride] = useState(false); // 
+  const [count, setCount] = useState(0); 
+  const [limit, setLimit] = useState(3); 
+  const [clicks, setClicks] = useState(0);
+  const [buttonRed, setButtonRed] = useState(false); 
+  const [override, setOverride] = useState(false); 
 
-  const [timerStarted, setTimerStarted] = useState(false); //
-  const [decreaseTimer, setDecreaseTimer] = useState(null) //
-  const [interval, changeInterval] = useState(null); //
-  const [overrideTimer, setOverrideTimer] = useState(null); //
-  const [overrideInterval, setOverrideInterval] = useState(null); //
+  const [timerStarted, setTimerStarted] = useState(false); 
+  const [decreaseTimer, setDecreaseTimer] = useState(null) 
+  const [interval, changeInterval] = useState(null); 
+  const [overrideTimer, setOverrideTimer] = useState(null); 
+  const [overrideInterval, setOverrideInterval] = useState(null); 
 
-  const [overrideSeconds, setOverrideSeconds] = useState(gameSettings.overdriveDuration[gameMode]); //
-  const [overdriveChance, setOverdriveChance] = useState(gameSettings.overdriveChance[gameMode]); //
-  const [cps, setCPS] = useState(gameSettings.cps[gameMode]); //
+  const [overrideSeconds, setOverrideSeconds] = useState(gameSettings.overdriveDuration[gameMode]); 
+  const [overdriveChance, setOverdriveChance] = useState(gameSettings.overdriveChance[gameMode]); 
+  const [cps, setCPS] = useState(gameSettings.cps[gameMode]); 
 
 
-  const [trophies, setTrophies] = useState(0); //
+  const [trophies, setTrophies] = useState(0); 
 
   const countRef = useRef();
   const clickRef = useRef();
   const overRef = useRef();
+
+  const {width, height} = useWindowSize();
 
 
   useEffect(()=>{
@@ -70,6 +54,7 @@ function App() {
     clearInterval(decreaseTimer);
     clearTimeout(overrideTimer);
     clearInterval(overrideInterval);
+    clearInterval(interval);
 
     setGameMode(newMode);
 
@@ -116,8 +101,8 @@ function App() {
         else setCount(count + 1)
         setClicks(clicks+1);
         setTimeout( () => {
-          // console.log('limit settimeout callback is runnign...')
-          // console.log('increasing the limit...')
+          // limit settimeout callback is runnign...
+          // increasing the limit...
           setLimit(Number.parseInt(clickRef.current.innerText) + cps);
           setTimerStarted(false) 
         }, 1000)
@@ -138,20 +123,20 @@ function App() {
       setOverrideSeconds(Number.parseInt(overRef.current.innerText) - 1);
     }, 1000))
     
-      setOverrideTimer( setTimeout( () => {
-      // console.log('override callback is running...');
-      setOverride(false);
-      setOverrideTimer(null);
-      clearInterval(overrideInterval);
-      setOverrideInterval(null);
-      setOverrideSeconds(gameSettings.overdriveDuration[gameMode])
-    }, (1000 + gameSettings.overdriveDuration[gameMode]*1000) )  )
-  
+      setOverrideTimer( 
+        setTimeout( () => { // override callback is running...
+          setOverride(false);
+          setOverrideTimer(null);
+          clearInterval(overrideInterval);
+          setOverrideInterval(null);
+          setOverrideSeconds(gameSettings.overdriveDuration[gameMode])
+        }, 
+        (1000 + gameSettings.overdriveDuration[gameMode]*1000) 
+      ))
   };
 
   const emptyTimer = () => {
-    return setTimeout( () => {
-      // console.log('empty settimeout callback is running...');
+    return setTimeout( () => { // empty settimeout callback is running...
       notClicked();
     }, 10000)
   };
@@ -160,50 +145,42 @@ function App() {
     setButtonRed(true);
     changeInterval(setInterval(()=>{
       setCount(Number.parseInt(countRef.current.innerText) - 1);
-      // console.log('changed')
     }, 1000))
-  }
-
-  if(count === 0 && interval){
-    clearInterval(interval);
-    changeInterval(null);
-    setButtonRed(false);
   }
 
   useEffect(()=>{
     if(overrideSeconds === 0 && overrideInterval){
-      console.log('cleared')
       clearInterval(overrideInterval);
       setOverrideInterval(null);
-      console.log('roger that')
     }
   })
 
-  console.log(overrideSeconds, overrideInterval)
-
-
-  // console.log('timerStarted', timerStarted)
-  // console.log('limit', limit)
-  // console.log('count:', count)
-  // console.log('buttonRed:', buttonRed)
-  // console.log('overrode', override)
-
-  // console.log("gameMode", gameMode)
+  useEffect(()=>{
+    if(count === 0 && interval){
+      clearInterval(interval);
+      changeInterval(null);
+      setButtonRed(false);
+    }
+  })
 
   return (
     <>
-    <select onChange={selectGameMode} value={gameMode}>
-      <option value="easy">easy</option>
-      <option value="medium">medium</option>
-      <option value="hard">hard</option>
-    </select>
-      <div ref={countRef}>{count}</div>
-      <button disabled={buttonRed} onClick={handleClick} style={{'background': `${buttonRed ? 'red' : '#fff'}`}}>Click</button>
+      <Select gameMode={gameMode} selectGameMode={selectGameMode} />
+      <Counter count={count} countRef={countRef} buttonRed={buttonRed} handleClick={handleClick} />
       <div ref={overRef} style={{display: 'none'}}>{overrideSeconds}</div>
-      {override && `override mode! - ${overrideSeconds}s left`}
-      {`clicks - ${clicks}`}
+      {override && 
+        <>
+        <Text>{`🥳 Override! - ${overrideSeconds} seconds left`}</Text>
+        <Confetti
+          width={width}
+          height={height}
+          gravity={0.5}
+          initialVelocityY={20}
+          recycle={overrideSeconds>2}
+        />
+      </>}
       <div ref={clickRef} style={{display: 'none'}}>{clicks}</div>
-      {trophies >0 && `trophies - ${trophies}`}
+      <Trophies trophies={trophies}/>
     </>
   );
 }
